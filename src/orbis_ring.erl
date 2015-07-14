@@ -24,7 +24,8 @@
 -export([new/1,
          partitions/1,
          size/1,
-         find_partition/2
+         find_partition/2,
+         hash/1
         ]).
 
 %% 2^(256 - 1).
@@ -62,6 +63,14 @@ find_partition(Index, Ring) ->
     Size = orbis_ring:size(Ring),
     Increment = increment(Size),
     (((Index div Increment) + 1) rem Size) * Increment.
+
+%% @doc Hash a given Erlang term.
+%% @end
+-spec hash(Data :: term()) -> integer().
+hash(Data) when is_binary(Data) ->
+    binary:decode_unsigned(crypto:hash(sha256, Data));
+hash(Data) ->
+    hash(term_to_binary(Data)).
 
 %% @private
 -spec increment(Size :: integer()) -> integer().

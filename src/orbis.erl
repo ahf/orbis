@@ -21,7 +21,7 @@
 -module(orbis).
 
 %% API.
--export([hash/1]).
+-export([]).
 
 %% Types.
 -export_type([ring/0,
@@ -36,9 +36,3 @@
 
 -type partition() :: integer().
 -type index()     :: integer().
-
--spec hash(Data :: term()) -> integer().
-hash(Data) when is_binary(Data) ->
-    binary:decode_unsigned(crypto:hash(sha256, Data));
-hash(Data) ->
-    hash(term_to_binary(Data)).
