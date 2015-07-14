@@ -38,5 +38,7 @@ start_link() ->
     supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
 init([]) ->
-    Procs = [],
+    Procs = [
+        ?CHILD(orbis_ring_manager, worker)
+    ],
     {ok, {{one_for_one, 10, 60}, Procs}}.
