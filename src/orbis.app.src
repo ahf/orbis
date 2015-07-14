@@ -1,0 +1,13 @@
+{application, orbis, [
+    {description, "Orbis: Consistent Hashing Utilities."},
+    {vsn, "0.1.0"},
+    {modules, []},
+    {registered, []},
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {env, []}
+]}.
+
+%% vim: set ft=erlang et :
