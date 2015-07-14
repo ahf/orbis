@@ -21,10 +21,11 @@
 -module(orbis).
 
 %% API.
--export([]).
+-export([dispatch/3]).
 
 %% Types.
 -export_type([ring/0,
+              ring_name/0,
               partition/0,
               index/0
              ]).
@@ -34,5 +35,14 @@
     partitions => [partition()]
 }.
 
+-type ring_name() :: term().
 -type partition() :: integer().
 -type index()     :: integer().
+
+-spec dispatch(Name, Key, Fun) -> term()
+    when
+        Name :: ring_name(),
+        Key  :: term(),
+        Fun  :: fun((Worker :: pid()) -> term()).
+dispatch(_Name, _Key, _Fun) ->
+    ok.
