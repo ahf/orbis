@@ -50,7 +50,7 @@ dispatch(Name, Key, Fun) ->
             Error
     end.
 
--spec child_spec(Name, Size, Module) -> supervisor:child_spec()
+-spec child_spec(Name, Size, Module) -> supervisor:child_spec() | {error, term()}
     when
         Name   :: pool(),
         Size   :: pos_integer(),
@@ -58,7 +58,7 @@ dispatch(Name, Key, Fun) ->
 child_spec(Name, Size, Module) ->
     child_spec(Name, Size, Module, []).
 
--spec child_spec(Name, Size, Module, Arguments) -> supervisor:child_spec()
+-spec child_spec(Name, Size, Module, Arguments) -> supervisor:child_spec() | {error, term()}
     when
         Name      :: pool(),
         Size      :: pos_integer(),
