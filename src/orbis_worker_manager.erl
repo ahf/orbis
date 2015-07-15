@@ -150,8 +150,11 @@ handle_cast(_Message, State) ->
     {noreply, State}.
 
 %% @private
+handle_info({'DOWN', _Ref, process, Worker, _Reason}, State) ->
+    ets:select_delete(?TABLE, [{{{pool_worker, '_', '_'}, Worker}, [], [true]}]),
+    {noreply, State};
+
 handle_info(Info, State) ->
-    io:format("Info: ~p~n", [Info]),
     {noreply, State}.
 
 %% @private
