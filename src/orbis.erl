@@ -40,7 +40,7 @@ dispatch(Name, Key, Fun) ->
         {ok, Bucket} ->
             Hash = orbis_chash:hash(Key),
             Partition = orbis_chash_bucket:find_partition(Hash, Bucket),
-            case orbis_worker_manager:lookup_worker(Name, Partition) of
+            case orbis_worker_manager:lookup_pool_worker(Name, Partition) of
                 {ok, Worker} when is_pid(Worker) ->
                     Fun(Worker);
                 {error, _} = Error ->
