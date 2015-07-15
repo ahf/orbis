@@ -1,5 +1,5 @@
 {application, orbis, [
-    {description, "Orbis: Consistent Hashing Utilities."},
+    {description, "Orbis: Consistent Hashing Worker Pools."},
     {vsn, "0.1.0"},
     {modules, []},
     {registered, []},

@@ -15,32 +15,34 @@
 %%%
 %%% ----------------------------------------------------------------------------
 %%% @author Alexander Færøy <ahf@0x90.dk>
-%%% @doc The Primary Supervisor for the Orbis Application
+%%% @doc Orbis Consistent Hashing API
 %%% @end
 %%% ----------------------------------------------------------------------------
--module(orbis_sup).
--behaviour(supervisor).
+-module(orbis_chash).
 
 %% API.
--export([start_link/0]).
+-export([hash/1]).
 
-%% Supervisor callbacks.
--export([init/1]).
+%% Types.
+-export_type([partition/0,
+              bucket/0]).
 
-%% From supervisor.
--type start_link_err() :: {already_started, pid()} | shutdown | term().
--type start_link_ret() :: {ok, pid()} | ignore | {error, start_link_err()}.
+-type partition() :: integer().
 
--define(CHILD(I, Type), {I, {I, start_link, []}, permanent, 5000, Type, [I]}).
+-type bucket() :: #{
+    size       => pos_integer(),
+    partitions => [partition()]
+}.
 
-%% @private
--spec start_link() -> start_link_ret().
-start_link() ->
-    supervisor:start_link({local, ?MODULE}, ?MODULE, []).
-
-%% @private
-init([]) ->
-    Procs = [
-        ?CHILD(orbis_worker_manager, worker)
-    ],
-    {ok, {{one_for_one, 10, 60}, Procs}}.
+%% @doc Hash a given Erlang term using SHA256.
+%%
+%% This function takes any Erlang term and gives you the SHA256 value, as an
+%% integer, as result. When the input is of another type than binary(), we'll
+%% apply term_to_binary() on the input automatically.
+%%
+%% @end
+-spec hash(Data :: term()) -> integer().
+hash(Data) when is_binary(Data) ->
+    binary:decode_unsigned(crypto:hash(sha256, Data));
+hash(Data) ->
+    hash(term_to_binary(Data)).

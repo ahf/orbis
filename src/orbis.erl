@@ -21,28 +21,56 @@
 -module(orbis).
 
 %% API.
--export([dispatch/3]).
+-export([dispatch/3,
+         child_spec/3,
+         child_spec/4]).
 
 %% Types.
--export_type([ring/0,
-              ring_name/0,
-              partition/0,
-              index/0
-             ]).
+-export_type([pool/0]).
 
--type ring() :: #{
-    size       => pos_integer(),
-    partitions => [partition()]
-}.
-
--type ring_name() :: term().
--type partition() :: integer().
--type index()     :: integer().
+-type pool() :: term().
 
 -spec dispatch(Name, Key, Fun) -> term()
     when
-        Name :: ring_name(),
+        Name :: pool(),
         Key  :: term(),
         Fun  :: fun((Worker :: pid()) -> term()).
-dispatch(_Name, _Key, _Fun) ->
-    ok.
+dispatch(Name, Key, Fun) ->
+    case orbis_worker_manager:lookup_pool_bucket(Name) of
+        {ok, Bucket} ->
+            Hash = orbis_chash:hash(Key),
+            Partition = orbis_chash_bucket:find_partition(Hash, Bucket),
+            case orbis_worker_manager:lookup_worker(Name, Partition) of
+                {ok, Worker} when is_pid(Worker) ->
+                    Fun(Worker);
+                {error, _} = Error ->
+                    Error
+            end;
+        {error, _} = Error ->
+            Error
+    end.
+
+-spec child_spec(Name, Size, Module) -> supervisor:child_spec()
+    when
+        Name   :: pool(),
+        Size   :: pos_integer(),
+        Module :: module().
+child_spec(Name, Size, Module) ->
+    child_spec(Name, Size, Module, []).
+
+-spec child_spec(Name, Size, Module, Arguments) -> supervisor:child_spec()
+    when
+        Name      :: pool(),
+        Size      :: pos_integer(),
+        Module    :: module(),
+        Arguments :: [term()].
+child_spec(Name, Size, Module, Arguments) ->
+    case orbis_worker_manager:new_pool(Name, Size) of
+        true ->
+            {ok, Partitions} = orbis_worker_manager:lookup_pool_partitions(Name),
+            lists:map(fun (Partition) ->
+                          {{Name, Partition}, {orbis_worker, start_link, [Module, Name, Partition, Arguments]}, permanent, 5000, worker, [orbis_worker]}
+                      end, Partitions);
+        false ->
+            {error, pool_already_exists}
+    end.

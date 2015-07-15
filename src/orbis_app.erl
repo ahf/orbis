@@ -15,19 +15,32 @@
 %%%
 %%% ----------------------------------------------------------------------------
 %%% @author Alexander Færøy <ahf@0x90.dk>
-%%% @doc Orbis Application
+%%% @doc The Orbis Application
+%%%
+%%% This is the entry point for the Orbis application, which takes care of
+%%% starting the primary supervisor.
+%%%
 %%% @end
 %%% ----------------------------------------------------------------------------
 -module(orbis_app).
 -behaviour(application).
 
 %% API.
--export([start/2, stop/1]).
+-export([start/0,
+         start/2,
+         stop/1]).
 
+%% @private
+-spec start() -> {ok, [atom()]} | {error, term()}.
+start() ->
+    application:ensure_all_started(orbis).
+
+%% @private
 -spec start(normal | {takeover, node()} | {failover, node()}, term()) -> {ok, pid()} | {error, term()}.
 start(_Type, _Args) ->
     orbis_sup:start_link().
 
+%% @private
 -spec stop([]) -> ok.
 stop(_State) ->
     ok.
