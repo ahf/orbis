@@ -3,10 +3,11 @@ Orbis
 
 [![Build Status](https://travis-ci.org/ahf/orbis.svg?branch=develop)](https://travis-ci.org/ahf/orbis)
 
-Orbis is an Erlang library for writing applications that uses consistent hashing
-to distribute requests amongst a set of workers in an application. The library
-provides no network distribution, but is a lot simpler to use and getting
-started with than larger and more complex libraries like [Riak Core](https://github.com/basho/riak_core/).
+Orbis is an Erlang library which helps writing applications that uses consistent
+hashing to distribute requests amongst a set of workers. The library provides no
+distribution amongst networked workers, but the library is a lot simpler to use,
+and getting started with, than larger and more complex libraries like [Riak
+Core](https://github.com/basho/riak_core/).
 
 The API of Orbis is greatly inspired by the fantastic [Poolboy Erlang
 library](https://github.com/devinus/poolboy).
