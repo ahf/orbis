@@ -11,6 +11,19 @@ started with than larger and more complex libraries like [Riak Core](https://git
 The API of Orbis is greatly inspired by the fantastic [Poolboy Erlang
 library](https://github.com/devinus/poolboy).
 
+Usage
+-----
+
+1. Create a named pool using `orbis:child_spec/3` (or `orbis:child_spec/4`), which
+   allows you to specify a name of the worker pool, size of the worker pool, which
+   must be a number of power of two (1, 2, 4, 8, ...), a worker module and an
+   optional set of arguments passed to the worker's `start_link` function. Pass
+   the result of the `orbis:child_spec` function to your supervisor.
+
+2. Implement your worker module with the `orbis_worker` behaviour.
+
+3. Use `orbis:dispatch/3` to distribute work amongst your set of workers.
+
 Example Application
 -------------------
 
