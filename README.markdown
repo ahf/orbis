@@ -10,7 +10,7 @@ networked systems.
 Authors
 -------
 
-1. [Alexander Færøy](https://twitter.com/ahfaeroey).
+- [Alexander Færøy](https://twitter.com/ahfaeroey).
 
 Licence
 -------
