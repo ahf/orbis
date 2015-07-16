@@ -31,6 +31,30 @@ Here's the interesting files of an example application using Orbis to distribute
 requests amongst a set of `gen_server` workers. You can see and download the
 full example application [here](https://github.com/ahf/orbis_example/).
 
+### The Orbis Example Application API.
+
+This module implements the API which distributes the events amongst our workers.
+
+```erlang
+-module(orbis_example).
+
+%% API.
+-export([ping/1, crash/1]).
+
+ping(Key) ->
+    dispatch(Key, fun (Worker) ->
+                      orbis_example_worker:ping(Worker)
+                  end).
+
+crash(Key) ->
+    dispatch(Key, fun (Worker) ->
+                      orbis_example_worker:crash(Worker)
+                  end).
+
+dispatch(Key, Fun) ->
+    orbis:dispatch(orbis_example_pool, Key, Fun).
+```
+
 ### The Orbis Worker
 
 This module implements the `gen_server` which will handle our requests. It
@@ -122,30 +146,6 @@ init([]) ->
     %% orbis_example_worker as worker.
     Procs = orbis:child_spec(orbis_example_pool, 64, orbis_example_worker),
     {ok, {{one_for_one, 10, 60}, Procs}}.
-```
-
-### Our Example API.
-
-This module implements the API which distributes the events amongst our workers.
-
-```erlang
--module(orbis_example).
-
-%% API.
--export([ping/1, crash/1]).
-
-ping(Key) ->
-    dispatch(Key, fun (Worker) ->
-                      orbis_example_worker:ping(Worker)
-                  end).
-
-crash(Key) ->
-    dispatch(Key, fun (Worker) ->
-                      orbis_example_worker:crash(Worker)
-                  end).
-
-dispatch(Key, Fun) ->
-    orbis:dispatch(orbis_example_pool, Key, Fun).
 ```
 
 Authors
