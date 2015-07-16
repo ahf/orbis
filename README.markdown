@@ -3,9 +3,13 @@ Orbis
 
 [![Build Status](https://travis-ci.org/ahf/orbis.svg?branch=develop)](https://travis-ci.org/ahf/orbis)
 
-Orbis is a simple library for using consistent hashing to partition a pool of
-workers in an Erlang application. The library provides no distribution across
-networked systems.
+Orbis is an Erlang library for writing applications that uses consistent hashing
+to distribute requests amongst a set of workers in an application. The library
+provides no network distribution, but is a lot simpler to use and getting
+started with than larger and more complex libraries like [Riak Core](https://github.com/basho/riak_core/).
+
+The API of Orbis is greatly inspired by the fantastic [Poolboy Erlang
+library](https://github.com/devinus/poolboy).
 
 Example Application
 -------------------
@@ -16,10 +20,10 @@ full example application [here](https://github.com/ahf/orbis_example/).
 
 ### The Orbis Worker
 
-This module implements the `gen_server` that will handle our requests. It
-implements two functions: `ping/1`, which will return a `pong` together with
-some information about the server that served the request, and a `crash/1`
-which will simply crash the server receiving the request.
+This module implements the `gen_server` which will handle our requests. It
+exposes two API functions: `ping/1`, which will return a `pong` together with
+some information about the server which handled the given request, and a
+`crash/1` which will simply crash the server handling the request.
 
 ```erlang
 -module(orbis_example_worker).
@@ -85,10 +89,10 @@ code_change(_OldVersion, State, _Extra) ->
 
 ### The Application Supervisor
 
-This module implements the supervisor handling the workers. The call to
-`orbis:child_spec/3` or `orbis:child_spec/4` will initialize the state needed
-for the pool and will return a child spec which we will pass to the supervisor,
-which will handle starting and restarting of our workers.
+This module implements the supervisor which managers the workers. The call to
+`orbis:child_spec/3` (or `orbis:child_spec/4`) will initialize the state needed
+for the Orbis pool and will return a child spec which we pass to the supervisor,
+which will take care of starting and restarting our workers.
 
 ```erlang
 -module(orbis_example_sup).
@@ -109,7 +113,7 @@ init([]) ->
 
 ### Our Example API.
 
-This module implements the API to distribute events amongst our worker pool.
+This module implements the API which distributes the events amongst our workers.
 
 ```erlang
 -module(orbis_example).
