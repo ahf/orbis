@@ -154,7 +154,7 @@ handle_info({'DOWN', _Ref, process, Worker, _Reason}, State) ->
     ets:select_delete(?TABLE, [{{{pool_worker, '_', '_'}, Worker}, [], [true]}]),
     {noreply, State};
 
-handle_info(Info, State) ->
+handle_info(_Info, State) ->
     {noreply, State}.
 
 %% @private
