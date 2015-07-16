@@ -6,7 +6,7 @@ Orbis
 Orbis is an Erlang library which helps writing applications that uses consistent
 hashing to distribute requests amongst a set of workers. The library provides no
 distribution amongst networked workers, but the library is a lot simpler to use,
-and getting started with, than larger and more complex libraries like [Riak
+and get started with, than larger and more complex libraries like [Riak
 Core](https://github.com/basho/riak_core/).
 
 The API of Orbis is greatly inspired by the fantastic [Poolboy Erlang
@@ -23,7 +23,7 @@ Usage
 
 2. Implement your worker module with the `orbis_worker` behaviour.
 
-3. Use `orbis:dispatch/3` to distribute work amongst your set of workers.
+3. Use `orbis:dispatch/3` to distribute work amongst your workers.
 
 Example Application
 -------------------
