@@ -149,6 +149,10 @@ init([]) ->
     {ok, {{one_for_one, 10, 60}, Procs}}.
 ```
 
+### Running the Example Application
+
+[![asciicast](https://asciinema.org/a/2410uhzmgoganbkl745h6x86w.png)](https://asciinema.org/a/2410uhzmgoganbkl745h6x86w)
+
 Authors
 -------
 
