@@ -153,6 +153,15 @@ init([]) ->
 
 [![asciicast](https://asciinema.org/a/2410uhzmgoganbkl745h6x86w.png)](https://asciinema.org/a/2410uhzmgoganbkl745h6x86w)
 
+Example Applications
+--------------------
+
+- [Orbis Example Application](https://github.com/ahf/orbis_example/): A simple
+  example application for Orbis.
+
+- [Orbis UUID](https://github.com/ahf/orbis_uuid/): A UUID Generator that uses
+  Orbis.
+
 Authors
 -------
 
