@@ -1,3 +1,5 @@
+%% coding: utf-8
+
 {application, orbis, [
     {description, "Orbis: Consistent Hashing Worker Pools."},
     {vsn, "0.2.0"},
@@ -9,7 +11,14 @@
         crypto
     ]},
     {mod, {orbis_app, []}},
-    {env, []}
+    {env, []},
+
+    {contributors, ["Alexander Faeroey"]},
+    {licenses, ["Apache 2"]},
+    {links, [
+        {"Github", "https://github.com/ahf/orbis/"},
+        {"Example Application", "https://github.com/ahf/orbis_example/"}
+    ]}
 ]}.
 
 %% vim: set ft=erlang et :
