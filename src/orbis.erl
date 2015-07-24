@@ -22,6 +22,7 @@
 
 %% API.
 -export([dispatch/3,
+         broadcast/2,
          child_spec/3,
          child_spec/4]).
 
@@ -46,6 +47,18 @@ dispatch(Name, Key, Fun) ->
                 {error, _} = Error ->
                     Error
             end;
+        {error, _} = Error ->
+            Error
+    end.
+
+-spec broadcast(Name, Fun) -> term()
+    when
+        Name :: pool(),
+        Fun  :: fun((Workers :: [pid()]) -> term()).
+broadcast(Name, Fun) ->
+    case orbis_worker_manager:lookup_pool_workers(Name) of
+        {ok, Workers} ->
+            Fun(Workers);
         {error, _} = Error ->
             Error
     end.

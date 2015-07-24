@@ -29,6 +29,7 @@
          lookup_pool_size/1,
          lookup_pool_partitions/1,
          lookup_pool_worker/2,
+         lookup_pool_workers/1,
          monitor_pool_worker/3
          ]).
 
@@ -109,6 +110,17 @@ lookup_pool_worker(Name, Partition) ->
             {ok, Pid};
         [] ->
             {error, worker_not_found}
+    end.
+
+-spec lookup_pool_workers(Name) -> {ok, [pid()]} | {error, term()}
+    when
+        Name :: orbis:pool().
+lookup_pool_workers(Name) ->
+    case ets:select(?TABLE, [{{{pool_worker, Name, '_'}, '$1'}, [], ['$1']}]) of
+        [] ->
+            {error, workers_not_found};
+        Workers ->
+            {ok, Workers}
     end.
 
 -spec monitor_pool_worker(Name, Partition, Worker) -> boolean()
